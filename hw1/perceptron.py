@@ -1,9 +1,10 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn import datasets
-
+from matplotlib.colors import ListedColormap
 class Perceptron:
-    """Perceptron classifier.
+    """
+    Perceptron classifier.
     
     Parameters:
     eta : float - Learning rate (0.0 to 1.0)
@@ -22,7 +23,8 @@ class Perceptron:
         self.random_state = random_state
 
     def fit(self, X, y):
-        """Train the perceptron.
+        """
+        Train the perceptron.
         
         Parameters:
         X : array-like, shape = [n_samples, n_features] - Training data
@@ -53,36 +55,50 @@ class Perceptron:
     def predict(self, X):
         """Classify samples based on net input."""
         return np.where(self.net_input(X) >= 0.0, 1, 0)
+    
+    def hyperplane(self, X, y, title="Decision Regions", resolution=0.01):
+        """Plot decision regions using a meshgrid."""
+        colors = ('red', 'blue')
+        cmap = ListedColormap(colors[:len(np.unique(y))])
 
-# Load the Iris dataset
-iris = datasets.load_iris()
-X = iris.data[:, [0, 2]]  # Select two features (sepal length, petal length)
-y = iris.target
+        x0_range = np.arange(X[:, 0].min() - 1, X[:, 0].max() + 1, resolution)
+        x1_range = np.arange(X[:, 1].min() - 1, X[:, 1].max() + 1, resolution)
+        grid_x0, grid_x1 = np.meshgrid(x0_range, x1_range)
+        grid_points = np.c_[grid_x0.ravel(), grid_x1.ravel()]
+        Z = self.predict(grid_points).reshape(grid_x0.shape)
+        
+        plt.figure(figsize=(8, 6))
+        plt.contourf(grid_x0, grid_x1, Z, alpha=0.3, cmap=cmap)
+        plt.xlim(grid_x0.min(), grid_x0.max())
+        plt.ylim(grid_x1.min(), grid_x1.max())
 
-mask = y != 2  # Exclude class 2 (Virginica)
-X = X[mask]
-y = y[mask]
+        plt.scatter(X[y == 0, 0], X[y == 0, 1], color='red', marker='o', label='Setosa')
+        plt.scatter(X[y == 1, 0], X[y == 1, 1], color='blue', marker='s', label='Versicolor')
+        plt.xlabel('Sepal length (cm)')
+        plt.ylabel('Petal length (cm)')
+        plt.title(title)
+        plt.legend()
+        plt.show()
 
-y = np.where(y == 0, 0, 1)
+if __name__ == '__main__': 
+    iris = datasets.load_iris()
+    X = iris.data[:, [0, 2]]  # Use Sepal Length & Petal Length
+    y = iris.target
 
-# Scatter plot of dataset
-plt.figure(figsize=(8, 6))
-plt.scatter(X[y == 0, 0], X[y == 0, 1], color='red', marker='o', label='Setosa')
-plt.scatter(X[y == 1, 0], X[y == 1, 1], color='blue', marker='s', label='Versicolor')
-plt.xlabel('Sepal length (cm)')
-plt.ylabel('Petal length (cm)')
-plt.legend()
-plt.title('Iris Dataset: Sepal vs. Petal Length')
-plt.show()
+    # keep only Setosa (0) and Versicolor (1), removing Virginica (2)
+    mask = y != 2
+    X, y = X[mask], y[mask]
 
-# Train Perceptron
-ppn = Perceptron(eta=0.1, n_iter=10)
-ppn.fit(X, y)
+    # convert labels: Setosa → 0, Versicolor → 1
+    y = np.where(y == 0, 0, 1)
 
-# Plot training convergence
-plt.figure(figsize=(8, 6))
-plt.plot(range(1, len(ppn.errors_) + 1), ppn.errors_, marker='o')
-plt.xlabel('Epochs')
-plt.ylabel('Number of updates')
-plt.title('Perceptron Training Convergence')
-plt.show()
+    ppn = Perceptron(eta=0.01, n_iter=20)
+    ppn.fit(X, y)
+    ppn.hyperplane(X, y, title="Perceptron Learning on Iris Dataset")
+
+    plt.figure(figsize=(8, 6))
+    plt.plot(range(1, len(ppn.errors_) + 1), ppn.errors_, marker='o')
+    plt.xlabel('Epochs')
+    plt.ylabel('Mean Squared Error')
+    plt.title('Perceptron Training Loss')
+    plt.show()

@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn import datasets
-
+from matplotlib.colors import ListedColormap
 class AdalineGD:
     """Adaptive Linear Neuron Classifier (Adaline)
     
@@ -57,36 +57,50 @@ class AdalineGD:
         """Return class label after unit step function."""
         return np.where(self.activation(self.net_input(X)) >= 0.5, 1, 0)
 
-# Load the Iris dataset
-iris = datasets.load_iris()
-X = iris.data[:, [0, 2]]  # Use Sepal Length & Petal Length
-y = iris.target
+    def hyperplane(self, X, y, title="Decision Regions", resolution=0.01):
+        """Plot decision regions using a meshgrid."""
+        colors = ('red', 'blue')
+        cmap = ListedColormap(colors[:len(np.unique(y))])
 
-# Keep only Setosa (0) and Versicolor (1), removing Virginica (2)
-mask = y != 2
-X, y = X[mask], y[mask]
+        x0_range = np.arange(X[:, 0].min() - 1, X[:, 0].max() + 1, resolution)
+        x1_range = np.arange(X[:, 1].min() - 1, X[:, 1].max() + 1, resolution)
+        grid_x0, grid_x1 = np.meshgrid(x0_range, x1_range)
+        grid_points = np.c_[grid_x0.ravel(), grid_x1.ravel()]
+        Z = self.predict(grid_points).reshape(grid_x0.shape)
+        
+        plt.figure(figsize=(8, 6))
+        plt.contourf(grid_x0, grid_x1, Z, alpha=0.3, cmap=cmap)
+        plt.xlim(grid_x0.min(), grid_x0.max())
+        plt.ylim(grid_x1.min(), grid_x1.max())
 
-# Convert labels: Setosa → 0, Versicolor → 1
-y = np.where(y == 0, 0, 1)
+        plt.scatter(X[y == 0, 0], X[y == 0, 1], color='red', marker='o', label='Setosa')
+        plt.scatter(X[y == 1, 0], X[y == 1, 1], color='blue', marker='s', label='Versicolor')
+        plt.xlabel('Sepal length (cm)')
+        plt.ylabel('Petal length (cm)')
+        plt.title(title)
+        plt.legend()
+        plt.show()
+    
+if __name__ == '__main__': 
+    # Load the Iris dataset
+    iris = datasets.load_iris()
+    X = iris.data[:, [0, 2]]  # Use Sepal Length & Petal Length
+    y = iris.target
 
-# Scatter plot of dataset
-plt.figure(figsize=(8, 6))
-plt.scatter(X[y == 0, 0], X[y == 0, 1], color='red', marker='o', label='Setosa')
-plt.scatter(X[y == 1, 0], X[y == 1, 1], color='blue', marker='s', label='Versicolor')
-plt.xlabel('Sepal length (cm)')
-plt.ylabel('Petal length (cm)')
-plt.legend()
-plt.title('Iris Dataset: Sepal vs. Petal Length')
-plt.show()
+    # keep only Setosa (0) and Versicolor (1), removing Virginica (2)
+    mask = y != 2
+    X, y = X[mask], y[mask]
 
-# Train Adaline
-adaline = AdalineGD(eta=0.01, n_iter=20)
-adaline.fit(X, y)
+    # convert labels: Setosa → 0, Versicolor → 1
+    y = np.where(y == 0, 0, 1)
 
-# Plot training loss
-plt.figure(figsize=(8, 6))
-plt.plot(range(1, len(adaline.losses_) + 1), adaline.losses_, marker='o')
-plt.xlabel('Epochs')
-plt.ylabel('Mean Squared Error')
-plt.title('Adaline Training Loss')
-plt.show()
+    adaline = AdalineGD(eta=0.01, n_iter=20)
+    adaline.fit(X, y)
+    adaline.hyperplane(X, y, title="Adaline on Iris Dataset")
+
+    plt.figure(figsize=(8, 6))
+    plt.plot(range(1, len(adaline.losses_) + 1), adaline.losses_, marker='o')
+    plt.xlabel('Epochs')
+    plt.ylabel('Mean Squared Error')
+    plt.title('Adaline Training Loss')
+    plt.show()
