@@ -82,9 +82,8 @@ class AdalineGD:
         plt.show()
     
 if __name__ == '__main__': 
-    # Load the Iris dataset
     iris = datasets.load_iris()
-    X = iris.data[:, [0, 2]]  # Use Sepal Length & Petal Length
+    X = iris.data[:, [0, 2]]  # use Sepal Length & Petal Length
     y = iris.target
 
     # keep only Setosa (0) and Versicolor (1), removing Virginica (2)
