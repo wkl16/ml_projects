@@ -18,34 +18,42 @@ y = np.where(y == 'Iris-setosa', 0, y)
 y = np.where(y == 'Iris-versicolor', 1, y)
 y = np.where(y == 'Iris-virginica', 2, y)
 
-print(y)
 # extract all features
 
 X = df.iloc[:, [0,1,2,3]].values
 
-#print(X)
-
-# TODO make sure to use perceptron class defined by Jay in part 2
-# TODO figure out a better way of labeling positive instances
-
 # train perceptron 1 - setosa
 ppn_s = Perceptron(eta=0.1, n_iter=10)
-y_s = np.where(y == 2, 1, y)
-print(y_s)
-
+y_s = np.concatenate((np.ones(50, dtype=int), np.zeros(100, dtype=int)))
 ppn_s.fit(X,y_s)
 
 # train perceptron 2 - versicolor
 ppn_ve = Perceptron(eta=0.1, n_iter=10)
-y_ve = np.where(y == 2, 0, y)
-print(y_ve)
-
+y_ve = np.concatenate((np.zeros(50, dtype=int), np.ones(50, dtype=int), np.zeros(50, dtype=int)))
 ppn_ve.fit(X,y_ve)
 
 # train perceptron 3 - virginica
 ppn_vi = Perceptron(eta=0.1, n_iter=10)
-#y_vi = np.where(y == 2, 1, y)
-y_vi = np.where(y == 1, 0, y)
-print(y_vi)
-
+y_vi = np.concatenate((np.zeros(100, dtype=int), np.ones(50, dtype=int)))
 ppn_vi.fit(X,y_vi)
+
+# predict by choosing the class label with largest absolute net input value
+
+test_data = [5.9, 3.0, 5.1, 1.8]
+
+setosa_netinput = abs(ppn_s.net_input(test_data))
+versicolor_netinput = abs(ppn_ve.net_input(test_data))
+virginica_netinput = abs(ppn_vi.net_input(test_data))
+
+print(f'setosa absolute net input value: {setosa_netinput}')
+print(f'versicolor absolute net input value: {versicolor_netinput}')
+print(f'virginica absolute net input value: {virginica_netinput}')
+
+prediction = max(setosa_netinput, versicolor_netinput, virginica_netinput)
+
+if prediction == setosa_netinput:
+    print('Prediction is setosa')
+elif prediction == versicolor_netinput:
+    print('Prediction is versicolor')
+else:
+    print('Prediction is virginica')
