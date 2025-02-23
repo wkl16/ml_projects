@@ -33,7 +33,7 @@ def make_classification(d, n, u = 1, random_seed = 2):
     # step 3 - give each xi a label yi such that if aTx < 0 then yi = -1, otherwise yi = 1
     labels = np.where(np.dot(samples, a) < 0, -1, 1)
 
-    # Below is optional, comment out if you don't want to create plots
+    # Below is optional, comment out if you don't want to create a plot
     # plot samples and hyperplane - only tested for 2-D data and u = 1
 
     plt.figure(figsize=(8,6))
@@ -43,8 +43,8 @@ def make_classification(d, n, u = 1, random_seed = 2):
     a_y = -(a[0] / a[1]) * a_x
     plt.ylim(-1.5,1.5)
     plt.xlim(-1.5,1.5)
-    plt.plot(a_x, a_y, 'k--', label = 'Separating Hyperplane')
-    plt.axhline(y=-u, color='green', linestyle='--', label='Bounding Box')
+    plt.plot(a_x, a_y, 'k--', label = 'Separating Hyperplane - vector a')
+    plt.axhline(y=-u, color='green', linestyle='--', label='Bounding Box - [-u, u]')
     plt.axhline(y=u, color='green', linestyle='--')
     plt.axvline(x=-u, color='green', linestyle='--')
     plt.axvline(x=u, color='green', linestyle='--')
