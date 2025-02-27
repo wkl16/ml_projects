@@ -54,8 +54,21 @@ def make_classification(d, n, u = 1, random_seed = 2):
 
     return samples, labels
 
-def data_to_txt(samples, labels):
+def data_to_txt(samples, labels, filename):
     data = np.hstack((samples, labels.reshape(-1,1)))
-    np.savetxt('samples_labels.txt', data, delimiter=',')
+    np.savetxt(filename, data, delimiter=',')
 
-make_classification(2, 200)
+dimensions = [10, 50, 100, 500, 1000]
+sample_counts = [500, 1000, 5000, 10000, 1000000]
+
+for d in dimensions:
+    samples, labels = make_classification(d, 500)
+    filename = f"samples_{d}d_{500}s.txt" 
+    data_to_txt(samples, labels, filename)
+
+# for d in dimensions:
+#     for n in sample_counts:
+#         samples, labels = make_classification(d, n)
+#         filename = f"samples_{d}d_{n}s.txt" 
+#         data_to_txt(samples, labels, filename)
+
