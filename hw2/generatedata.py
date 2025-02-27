@@ -62,8 +62,8 @@ dimensions = [10, 50, 100, 500, 1000]
 sample_counts = [500, 1000, 5000, 10000, 1000000]
 
 for d in dimensions:
-    samples, labels = make_classification(d, 500)
-    filename = f"samples_{d}d_{500}s.txt" 
+    samples, labels = make_classification(d, 1000)
+    filename = f"samples_{d}d_{1000}s.txt" 
     data_to_txt(samples, labels, filename)
 
 # for d in dimensions:
@@ -71,4 +71,3 @@ for d in dimensions:
 #         samples, labels = make_classification(d, n)
 #         filename = f"samples_{d}d_{n}s.txt" 
 #         data_to_txt(samples, labels, filename)
-
