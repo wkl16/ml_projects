@@ -70,19 +70,7 @@ def plot_scalability_results(results_df, output_dir='.'):
     plt.savefig(os.path.join(output_dir, 'accuracy_vs_dims.png'))
 
 def analyze_and_print_conclusions(results_df):
-    """Print key conclusions from results."""
-    print("\nObservations:")
-    
-    # training time vs dimensions
-    dim_time = results_df.groupby('Dimensions (d)')['Training Time (s)'].mean()
-    dim_inc = dim_time.iloc[-1] / dim_time.iloc[0]
-    print(f"Increasing dimensions from {dim_time.index[0]} to {dim_time.index[-1]} increases training time by {dim_inc:.1f}x.")
-    
-    # training time vs sample size
-    sample_time = results_df.groupby('Sample Size (n)')['Training Time (s)'].mean()
-    sample_inc = sample_time.iloc[-1] / sample_time.iloc[0]
-    print(f"Increasing sample size from {sample_time.index[0]} to {sample_time.index[-1]} increases training time by {sample_inc:.1f}x.")
-    
+    """Print key conclusions from results."""    
     # accuracy analysis
     acc_by_dim = results_df.groupby('Dimensions (d)')['Accuracy'].mean()
     print("Average accuracy across dimensions:\n" + acc_by_dim.to_string())
@@ -102,6 +90,9 @@ if __name__ == "__main__":
     print("\nResults:")
     print(results_df.to_string(index = False))
     
+    # accuracy analysis
+    acc_by_dim = results_df.groupby('Dimensions (d)')['Accuracy'].mean()
+    print("Average accuracy across dimensions:\n" + acc_by_dim.to_string())
+    
     results_df.to_csv('svm_scalability_results.csv', index=False)
     plot_scalability_results(results_df)
-    analyze_and_print_conclusions(results_df)
