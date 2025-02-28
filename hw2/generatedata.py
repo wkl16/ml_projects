@@ -50,7 +50,7 @@ def make_classification(d, n, u = 1, random_seed = 2):
     plt.axvline(x=u, color='green', linestyle='--')
     plt.title ('Linearly Separable Data')
     plt.legend()
-    plt.show()
+    # plt.show()
 
     return samples, labels
 
@@ -59,12 +59,14 @@ def data_to_txt(samples, labels, filename):
     np.savetxt(filename, data, delimiter=',')
 
 dimensions = [10, 50, 100, 500, 1000]
-sample_counts = [500, 1000, 5000, 10000, 1000000]
+# sample_counts = [500, 1000, 5000, 10000, 1000000]
+sample_counts = [10000, 1000000]
 
 for d in dimensions:
-    samples, labels = make_classification(d, 5000)
-    filename = f"samples_{d}d_{5000}s.txt" 
-    data_to_txt(samples, labels, filename)
+    for s in sample_counts:
+        samples, labels = make_classification(d, s)
+        filename = f"samples_{d}d_{s}s.txt" 
+        data_to_txt(samples, labels, filename)
 
 # for d in dimensions:
 #     for n in sample_counts:
