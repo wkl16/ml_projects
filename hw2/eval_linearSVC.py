@@ -4,6 +4,7 @@ import os
 import time
 from sklearn.metrics import accuracy_score
 import matplotlib.pyplot as plt
+import seaborn as sns  # for heatmap
 from linearSVC import LinearSVC
 
 def load_dataset(dataset_dir, d, n):
@@ -40,38 +41,59 @@ def evaluate_svc_scalability(dataset_dir, dimensions, sample_sizes, eta=0.01, n_
 
 def plot_scalability_results(results_df, output_dir='.'):
     """Generate training time and accuracy plots."""
-    # training time vs dimensions
+    # Training time vs. dimensions
     plt.figure(figsize=(8, 5))
     ax = results_df.pivot_table(values='Training Time (s)', index='Dimensions (d)', columns='Sample Size (n)').plot(marker='o')
     ax.set_yscale('log')
     plt.xlabel('Dimensions (d)')
     plt.ylabel('Training Time (s)')
-    plt.title('Training Time vs Dimensions')
+    plt.title('Training Time vs. Dimensions')
     plt.grid(True)
     plt.savefig(os.path.join(output_dir, 'training_time_vs_dims.png'))
+    plt.close()
     
-    # training time vs sample size
+    # Training time vs. sample size
     plt.figure(figsize=(8, 5))
-    results_df.pivot_table(values='Training Time (s)', index='Sample Size (n)', columns='Dimensions (d)').plot(marker='o')
+    bx = results_df.pivot_table(values='Training Time (s)', index='Sample Size (n)', columns='Dimensions (d)').plot(marker='o')
+    bx.set_xscale('log')
     plt.xlabel('Sample Size (n)')
     plt.ylabel('Training Time (s)')
-    plt.title('Training Time vs Sample Size')
+    plt.title('Training Time vs. Sample Size')
     plt.grid(True)
     plt.savefig(os.path.join(output_dir, 'training_time_vs_samples.png'))
+    plt.close()
     
-    # accuracy plot
+    # Accuracy vs. dimensions
     plt.figure(figsize=(8, 5))
-    results_df.pivot_table(values='Accuracy', index='Dimensions (d)', columns='Sample Size (n)').plot(marker='o')
+    cx = results_df.pivot_table(values='Accuracy', index='Dimensions (d)', columns='Sample Size (n)').plot(marker='o')
     plt.xlabel('Dimensions (d)')
     plt.ylabel('Accuracy')
-    plt.title('Accuracy vs Dimensions')
+    plt.title('Accuracy vs. Dimensions')
     plt.grid(True)
-    # plt.show()
     plt.savefig(os.path.join(output_dir, 'accuracy_vs_dims.png'))
+    plt.close()
+
+def plot_time_heatmap(results_df, output_dir='.'):
+    """
+    Generate a heatmap showing how training time varies 
+    with sample size and dimensions.
+    """
+    heat_data = results_df.pivot_table(
+        values='Training Time (s)',
+        index='Sample Size (n)',
+        columns='Dimensions (d)'
+    )
+    plt.figure(figsize=(8, 6))
+    sns.heatmap(heat_data, cmap="YlGnBu", annot=True, fmt=".2f")
+    plt.xlabel("Dimensions (d)")
+    plt.ylabel("Sample Size (n)")
+    plt.title("Training Time Heatmap")
+    plt.tight_layout()
+    plt.savefig(os.path.join(output_dir, 'training_time_heatmap.png'))
+    plt.close()
 
 def analyze_and_print_conclusions(results_df):
-    """Print key conclusions from results."""    
-    # accuracy analysis
+    """Print key conclusions from results."""
     acc_by_dim = results_df.groupby('Dimensions (d)')['Accuracy'].mean()
     print("Average accuracy across dimensions:\n" + acc_by_dim.to_string())
 
@@ -79,7 +101,6 @@ if __name__ == "__main__":
     current_dir = os.path.dirname(__file__)
     dataset_dir = os.path.join(current_dir, "dataset")
     
-    # extract dimensions and sample sizes from filenames
     files = [f for f in os.listdir(dataset_dir) if f.startswith("samples_") and f.endswith("s.txt")]
     dimensions = sorted({int(f.split("_")[1].split('d')[0]) for f in files})
     sample_sizes = sorted({int(f.split("_")[2].split('s')[0]) for f in files})
@@ -88,11 +109,12 @@ if __name__ == "__main__":
     
     results_df = evaluate_svc_scalability(dataset_dir, dimensions, sample_sizes)
     print("\nResults:")
-    print(results_df.to_string(index = False))
+    print(results_df.to_string(index=False))
     
-    # accuracy analysis
     acc_by_dim = results_df.groupby('Dimensions (d)')['Accuracy'].mean()
-    print("Average accuracy across dimensions:\n" + acc_by_dim.to_string())
+    print("\nAverage accuracy across dimensions:\n" + acc_by_dim.to_string())
     
     results_df.to_csv('svm_scalability_results.csv', index=False)
+    
     plot_scalability_results(results_df)
+    plot_time_heatmap(results_df)
