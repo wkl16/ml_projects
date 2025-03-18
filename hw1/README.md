@@ -1,10 +1,15 @@
 README for Assignment 1.
 
+
 Contributors: 
 Ellie Larence 
+
 Matthew Lloyd Macias
+
 Jamerson Tenorio
+
 Leo Wang
+
 
 Notes:
 To generate experiment results, run the Assignment1.py python script, using python that 
