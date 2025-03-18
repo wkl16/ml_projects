@@ -3,10 +3,10 @@ README for Assignment 1.
 
 Contributors: 
 
-Ellie Larence 
-Matthew Lloyd Macias
-Jamerson Tenorio
-Leo Wang
+Ellie Larence  
+Matthew Lloyd Macias  
+Jamerson Tenorio  
+Leo Wang  
 
 
 Notes:
