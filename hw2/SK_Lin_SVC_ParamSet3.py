@@ -87,9 +87,9 @@ if __name__ == "__main__":
     # dataset_dir = os.path.join(current_dir, "dataset")
     dataset_dir = current_dir
 
-    outs_dir_name = "Param_Set_2"
+    outs_dir_name = "Param_Set_3"
     if not (os.path.exists(outs_dir_name) and os.path.isdir(outs_dir_name)):
-        os.mkdir("Param_Set_2")
+        os.mkdir("Param_Set_3")
     
     results_dir = os.path.join(current_dir, "Param_Set_3")
 
