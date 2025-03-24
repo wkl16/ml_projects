@@ -50,6 +50,7 @@ class RegressionTree:
                 return {
                     'node_type': 'root' if current_height == 0 else 'branch',
                     'height': current_height,
+                    'sample_split' : best_split['sample_split'],
                     'feature': best_split['feature'],
                     'feature_value': best_split['feature_value'],
                     'left': left_tree,
@@ -61,15 +62,17 @@ class RegressionTree:
         best_sse = float('inf')
 
         for i in range(num_features):
-            for j in X[:, i]:
+            j = 0
+            for k in X[:, i]:
+                #print(X[j])
                 left_split = list()
                 right_split = list()
 
-                for k, x in enumerate(X[:, i]):
-                    if x <= j:
-                        left_split.append(k)
+                for l, x in enumerate(X[:, i]):
+                    if x <= k:
+                        left_split.append(l)
                     else:
-                        right_split.append(k)
+                        right_split.append(l)
 
                 if left_split and right_split:
                     left_y = y[left_split]
@@ -78,11 +81,13 @@ class RegressionTree:
                     if sse < best_sse:
                         best_sse = sse
                         best_split = {
+                            'sample_split': (X[j]),
                             'feature': i,
-                            'feature_value': j,
+                            'feature_value': k,
                             'left_node': (X[left_split], left_y),
                             'right_node': (X[right_split], right_y),
                         }
+                j += 1
         return best_split
 
     #Sum of Squares Error
@@ -97,7 +102,7 @@ class RegressionTree:
         if node['node_type'] == 'leaf':
             print(f"{' ' * depth*2}Leaf Node: height = {node['height']}, samples = {node['sample(s)']}, values = {node['value(s)']},  predict_value = {node['predict_value']}")
         else:
-            print(f"{' ' * depth*2}Node: type = {node['node_type']}, height = {node['height']}, feature {node['feature']} <= {node['feature_value']}")
+            print(f"{' ' * depth*2}Node: type = {node['node_type']}, height = {node['height']},  sample split = {node['sample_split']},  feature {node['feature']} <= {node['feature_value']}")
             print(f"{' ' * depth*2}Left:")
             self.print_tree(node['left'], depth + 1)
             print(f"{' ' * depth*2}Right:")
