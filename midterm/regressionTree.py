@@ -11,7 +11,7 @@ class RegressionTree:
 
     def fit(self):
         self.tree = self.build_tree(self.X, self.y, 0)
-        return self.tree
+        return self
 
     def build_tree(self, X, y, current_height):
         num_samples, num_features = X.shape
@@ -64,7 +64,6 @@ class RegressionTree:
         for i in range(num_features):
             j = 0
             for k in X[:, i]:
-                #print(X[j])
                 left_split = list()
                 right_split = list()
 
@@ -75,26 +74,21 @@ class RegressionTree:
                         right_split.append(l)
 
                 if left_split and right_split:
-                    left_y = y[left_split]
-                    right_y = y[right_split]
-                    sse = self.sse(left_y, right_y)
+                    ly = y[left_split]
+                    ry = y[right_split]
+                    #Sum of Squares Error
+                    sse = np.sum((ly - np.mean(ly))**2) + np.sum((ry - np.mean(ry))**2)
                     if sse < best_sse:
                         best_sse = sse
                         best_split = {
                             'sample_split': (X[j]),
                             'feature': i,
                             'feature_value': k,
-                            'left_node': (X[left_split], left_y),
-                            'right_node': (X[right_split], right_y),
+                            'left_node': (X[left_split], ly),
+                            'right_node': (X[right_split], ry),
                         }
                 j += 1
         return best_split
-
-    #Sum of Squares Error
-    def sse(self, lty, rty):
-        lt_sse = np.sum((lty - np.mean(lty))**2)
-        rt_sse = np.sum((rty - np.mean(rty))**2)
-        return lt_sse + rt_sse
 
     def print_tree(self, node=None, depth=0):
         if node is None:
