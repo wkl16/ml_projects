@@ -6,7 +6,7 @@ class RegressionTree:
         self.y = y
         self.max_height = max_height
         self.leaf_size = leaf_size
-        self.limit= limit
+        self.limit = limit
         self.tree = None
 
     def fit(self):
@@ -44,15 +44,15 @@ class RegressionTree:
                     'predict_value': np.mean(y)
                 }
             else:
-                best_split = self.split(X, y, num_features)
-                left_tree = self.build_tree(*best_split['left_node'], current_height + 1)
-                right_tree = self.build_tree(*best_split['right_node'], current_height + 1)
+                split = self.split(X, y, num_features)
+                left_tree = self.build_tree(*split['left_split'], current_height + 1)
+                right_tree = self.build_tree(*split['right_split'], current_height + 1)
                 return {
                     'node_type': 'root' if current_height == 0 else 'branch',
                     'height': current_height,
-                    'sample_split' : best_split['sample_split'],
-                    'feature': best_split['feature'],
-                    'feature_value': best_split['feature_value'],
+                    'sample_split' : split['sample_split'],
+                    'feature': split['feature'],
+                    'feature_value': split['feature_value'],
                     'left': left_tree,
                     'right': right_tree
                 }
@@ -84,8 +84,8 @@ class RegressionTree:
                             'sample_split': (X[j]),
                             'feature': i,
                             'feature_value': k,
-                            'left_node': (X[left_split], ly),
-                            'right_node': (X[right_split], ry),
+                            'left_split': (X[left_split], ly),
+                            'right_split': (X[right_split], ry),
                         }
                 j += 1
         return best_split
