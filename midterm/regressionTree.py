@@ -94,9 +94,9 @@ class RegressionTree:
         if node is None:
             node = self.tree
         if node['node_type'] == 'leaf':
-            print(f"{' ' * depth*2}Leaf Node: height = {node['height']}, samples = {node['sample(s)']}, values = {node['value(s)']},  predict_value = {node['predict_value']}")
+            print(f"{' ' * depth*2}Leaf Node: height = {node['height']}, samples = {np.array2string(node['sample(s)'], separator=' ', formatter={'all': lambda x: str(x)}).replace("\n", "")}, values = {node['value(s)']},  predict_value = {node['predict_value']}")
         else:
-            print(f"{' ' * depth*2}Node: type = {node['node_type']}, height = {node['height']},  sample split = {node['sample_split']},  feature {node['feature']} <= {node['feature_value']}")
+            print(f"{' ' * depth*2}Node: type = {node['node_type']}, height = {node['height']}, sample split = {node['sample_split']},  feature {node['feature']}, <= {node['feature_value']}")
             print(f"{' ' * depth*2}Left:")
             self.print_tree(node['left'], depth + 1)
             print(f"{' ' * depth*2}Right:")
