@@ -90,16 +90,16 @@ class RegressionTree:
                 j += 1
         return best_split
 
-    def print_tree(self, node=None, depth=0):
+    def print_tree(self, node=None, depth=0, space=1):
         if node is None:
             node = self.tree
         if node['node_type'] == 'leaf':
-            print(f"{' ' * depth*2}Leaf Node: height = {node['height']}, samples = {np.array2string(node['sample(s)'], separator=' ', formatter={'all': lambda x: str(x)}).replace("\n", "")}, values = {node['value(s)']},  predict_value = {node['predict_value']}")
+            print(f"{' '*depth*space}Node: type = {node['node_type']}, height = {node['height']}, samples = {np.array2string(node['sample(s)'], separator=' ', formatter={'all': lambda x: str(x)}).replace("\n", "")}, values = {node['value(s)']},  predict_value = {node['predict_value']}")
         else:
-            print(f"{' ' * depth*2}Node: type = {node['node_type']}, height = {node['height']}, sample split = {node['sample_split']},  feature {node['feature']}, <= {node['feature_value']}")
-            print(f"{' ' * depth*2}Left:")
+            print(f"{' '*depth*space}Node: type = {node['node_type']}, height = {node['height']}, sample split = {node['sample_split']},  feature {node['feature']}, <= {node['feature_value']}")
+            print(f"{' '*depth*space}Left:")
             self.print_tree(node['left'], depth + 1)
-            print(f"{' ' * depth*2}Right:")
+            print(f"{' '*depth*space}Right:")
             self.print_tree(node['right'], depth + 1)
 
     def tree_traversal(self, node, x, use, path):
@@ -129,14 +129,14 @@ class RegressionTree:
         paths = list()
         for x in X:
             paths.append(self.tree_traversal(self.tree, x, 'decision_path', list()))
-        self.print_paths(X, paths, 0)
+        self.print_paths(X, paths, 0, 1)
         return self
 
-    def print_paths(self, X, paths, depth):
+    def print_paths(self, X, paths, depth, space):
         for i in range(len(paths)):
             print("For sample: ",X[i])
             for j in paths[i]:
-                print(f"{' ' * depth*2} {j}")
+                print(f"{' '*depth*space} {j}")
                 depth += 1
             depth = 0
         return self
