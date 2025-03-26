@@ -98,9 +98,9 @@ class RegressionTree:
         else:
             print(f"{' '*depth*space}Node: type = {node['node_type']}, height = {node['height']}, sample split = {node['sample_split']},  feature {node['feature']}, <= {node['feature_value']}")
             print(f"{' '*depth*space}Left:")
-            self.print_tree(node['left'], depth + 1)
+            self.print_tree(node['left'], depth + 1, space)
             print(f"{' '*depth*space}Right:")
-            self.print_tree(node['right'], depth + 1)
+            self.print_tree(node['right'], depth + 1, space)
 
     def tree_traversal(self, node, x, use, path):
         if node['node_type'] == 'leaf':
@@ -125,11 +125,11 @@ class RegressionTree:
             predicted.append(self.tree_traversal(self.tree, x, 'predict', list()))
         return np.array(predicted)
 
-    def decision_path(self, X):
+    def decision_path(self, X, space=1):
         paths = list()
         for x in X:
             paths.append(self.tree_traversal(self.tree, x, 'decision_path', list()))
-        self.print_paths(X, paths, 0, 1)
+        self.print_paths(X, paths, 0, space)
         return self
 
     def print_paths(self, X, paths, depth, space):
