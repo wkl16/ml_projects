@@ -47,7 +47,7 @@ def Task_4_xz_generate(startx1, startx2, endx1, endx2, num_points):
     cool_x2s = np.empty((0,1))
 
     for i in range(num_points):
-        cool_x1, cool_x2 = Task_4_xz_v2(x1s[i])
+        cool_x1, cool_x2 = Task_4_xz(x1s[i])
 
         cool_x1s = np.vstack((cool_x1s, [cool_x1]))
         cool_x2s = np.vstack((cool_x2s, [cool_x2]))
@@ -307,7 +307,7 @@ if __name__ == "__main__":
     temp_z = init_z
 
     for i in range(20):
-        x_next, z_next = Task_4_xz_v2(temp_x)
+        x_next, z_next = Task_4_xz(temp_x)
         print(x_next)
         x_actual = np.append(x_actual, x_next)
         z_actual = np.append(z_actual, z_next)
