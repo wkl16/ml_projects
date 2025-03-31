@@ -308,7 +308,6 @@ if __name__ == "__main__":
 
     for i in range(20):
         x_next, z_next = Task_4_xz(temp_x)
-        print(x_next)
         x_actual = np.append(x_actual, x_next)
         z_actual = np.append(z_actual, z_next)
         temp_x = x_next
