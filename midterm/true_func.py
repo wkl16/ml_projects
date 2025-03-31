@@ -72,10 +72,6 @@ if __name__ == "__main__":
     cool_xs = cool_xs.ravel()
     cool_zs = cool_zs.ravel()
 
-    # xs, zs, cool_xs, cool_zs = Task_4_xz_v2_generate(-3, 0, 3, 15, 1000)
-    # cool_xs = cool_xs.ravel()
-    # cool_zs = cool_zs.ravel()
-
     """"""
     x1s_train, x1s_test, cool_x1s_train, cool_x1s_test = train_test_split(
                                                          x1s, cool_x1s, test_size = 0.2, random_state=42
@@ -95,30 +91,46 @@ if __name__ == "__main__":
     ### No limit
     x1_reg_tree = r_tree(X=x1s_train, y=cool_x1s_train, max_height=float('inf'), leaf_size=1, limit=None)
     x2_reg_tree = r_tree(X=x2s_train, y=cool_x2s_train, max_height=float('inf'), leaf_size=1, limit=None)
+    start_time_x1_no_lim = time.time()
     x1_reg_tree.fit()
+    end_time_x1_no_lim = time.time() - start_time_x1_no_lim
+    start_time_x2_no_lim = time.time()
     x2_reg_tree.fit()
+    end_time_x2_no_lim = time.time() - start_time_x2_no_lim
     
     """"""
     ### Height Limit
     x1_reg_t_ht = r_tree(X=x1s_train, y=cool_x1s_train, max_height=3, leaf_size=1, limit="Height")
     x2_reg_t_ht = r_tree(X=x2s_train, y=cool_x2s_train, max_height=3, leaf_size=1, limit="Height")
+    start_time_x1_h_lim = time.time()
     x1_reg_t_ht.fit()
+    end_time_x1_h_lim = time.time() - start_time_x1_h_lim
+    start_time_x2_h_lim = time.time()
     x2_reg_t_ht.fit()
+    end_time_x2_h_lim = time.time() - start_time_x2_h_lim
 
     """"""
     ### Leaf Limit
     x1_reg_t_lf = r_tree(X=x1s_train, y=cool_x1s_train, max_height=float('inf'), leaf_size=5, limit="leaf_size")
     x2_reg_t_lf = r_tree(X=x2s_train, y=cool_x2s_train, max_height=float('inf'), leaf_size=5, limit="leaf_size")
+    start_time_x1_leaf_lim = time.time()
     x1_reg_t_lf.fit()
+    end_time_x1_leaf_lim = time.time() - start_time_x1_leaf_lim
+    start_time_x2_leaf_lim = time.time()
     x2_reg_t_lf.fit()
+    end_time_x2_leaf_lim = time.time() - start_time_x2_leaf_lim
 
     """"""
     ### 3 point program
     x_reg_tree = r_tree(X=xs_train, y=cool_xs_train, max_height=float('inf'), leaf_size=1, limit=None)
     z_reg_tree = r_tree(X=zs_train, y=cool_zs_train, max_height=float('inf'), leaf_size=1, limit=None)
+    start_time_x_no_lim = time.time()
     x_reg_tree.fit()
+    end_time_x_no_lim = time.time() - start_time_x_no_lim
+    start_time_z_no_lim  = time.time()
     z_reg_tree.fit()
-
+    end_time_z_no_lim = time.time() - start_time_z_no_lim
+    
     """"""
 
     # x1_pred = x1_reg_tree.predict(x1s_test)
@@ -137,6 +149,8 @@ if __name__ == "__main__":
 
     """"""""""""""
     print("x1 = 1.5, x2 = 0.5 Prediction analysis, No Limit")
+    print("x1 build time: ", end_time_x1_no_lim)
+    print("x2 build time: ", end_time_x2_no_lim)
 
     x1_init_pred = np.array([[init_x1]])
     x2_init_pred = np.array([[init_x2]])
@@ -179,6 +193,8 @@ if __name__ == "__main__":
 
     """"""""""""""
     print("x1 = 1.5, x2 = 0.5 Prediction analysis, Height Limit")
+    print("x1 build time: ", end_time_x1_h_lim)
+    print("x2 build time: ", end_time_x2_h_lim)
 
     x1_init_pred = np.array([[init_x1]])
     x2_init_pred = np.array([[init_x2]])
@@ -221,6 +237,8 @@ if __name__ == "__main__":
 
     """"""""""""""
     print("x1 = 1.5, x2 = 0.5 Prediction analysis, Leaf Limit")
+    print("x1 build time: ", end_time_x1_leaf_lim)
+    print("x2 build time: ", end_time_x2_leaf_lim)
 
     x1_init_pred = np.array([[init_x1]])
     x2_init_pred = np.array([[init_x2]])
@@ -259,7 +277,10 @@ if __name__ == "__main__":
     print("x2 = 0.5 pred: ", x2_init_pred)
     print("x2 Actual    : ", x2_actual)
 
+    """"""
     print("x = 2, z = 0 Prediction analysis, No Limit")
+    print("x build time: ", end_time_x_no_lim)
+    print("z build time: ", end_time_z_no_lim)
 
     x_init_pred = np.array([[init_x]])
     z_init_pred = np.array([[init_z]])
