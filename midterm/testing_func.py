@@ -219,7 +219,7 @@ if __name__ == "__main__":
 
     for i in range(20):
         x1_next = x1_reg_t_ht.predict([[temp_x1]])
-        x2_next = x1_reg_t_ht.predict([[temp_x1]])
+        x2_next = x2_reg_t_ht.predict([[temp_x1]])
         x1_init_pred = np.vstack((x1_init_pred, [x1_next]))
         x2_init_pred = np.vstack((x2_init_pred, [x2_next]))
         temp_x1 = x1_next
@@ -261,7 +261,7 @@ if __name__ == "__main__":
 
     for i in range(20):
         x1_next = x1_reg_t_lf.predict([[temp_x1]])
-        x2_next = x1_reg_t_lf.predict([[temp_x1]])
+        x2_next = x2_reg_t_lf.predict([[temp_x1]])
         x1_init_pred = np.vstack((x1_init_pred, [x1_next]))
         x2_init_pred = np.vstack((x2_init_pred, [x2_next]))
         temp_x1 = x1_next
