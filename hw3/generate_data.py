@@ -2,6 +2,7 @@ import idx2numpy
 import os
 import matplotlib.pyplot as plt
 import numpy as np
+import zipfile as zf
 from sklearn.svm import SVC
 from sklearn.preprocessing import StandardScaler
 from sklearn.pipeline import make_pipeline
@@ -14,8 +15,36 @@ def generate_data():
     # Specify dataset directory
     # Images MUST BE in this data directory
     data_dir_name = "Image_Data"
+    
+    # Check for dataset dir. If does not exist, make for preprocessing.
+    print("Checking for Dataset Directory...")
+    if not os.path.isdir(data_dir_name):
+        print("Dataset Directory does not exist, creating directory...")
+        os.mkdir(data_dir_name)
+        print("Directory successfully created!\n")
+    else:
+        print("Dataset Directory already exists, moving on...\n")
+    
     dataset_dir = os.path.join(current_dir, data_dir_name)
 
+    # Sets up the necessary filepaths and directories for Dataset directory
+    data_zip_name = "Image_Data.zip"
+    data_zip_path = os.path.join(current_dir, data_zip_name)
+    
+    # First checks if the dataset directory has items or not
+    # I.e. if the zip file has already been extraced into the directory
+    empty_check = os.listdir(dataset_dir)
+    if not empty_check:
+        print("Dataset Directory is empty, populating with necessary data...")
+        # Unzips the Dataset and extracts it into the Dataset directory
+        with zf.ZipFile(data_zip_path, 'r') as img_zip:
+            img_zip.extractall(current_dir)
+        print("Data has been populated!\n")
+    else:
+        print("Dataset has already been populated.\n")
+
+
+    print("Formatting Data...")
     # Set the n_features, test, and training points
     # for np.reshape
     n_features  = 784
@@ -47,14 +76,15 @@ def generate_data():
     # plt.figure(figsize=(8,5))
     # plt.imshow(train_images[1])
     # plt.show()
+    print("Data has been generated and formatted!")
     
     return flat_train_images, flat_test_images, train_labels, test_labels
 
 if __name__ == "__main__":
     X_train, X_test, y_train, y_test = generate_data()
     
-    print("X_train[0] flattened image:")
-    print(X_train[0])
-    print("\n\n")
-    print("X_test[0] flattened image:")
-    print(X_test[0])
+    # print("X_train[0] flattened image:")
+    # print(X_train[0])
+    # print("\n\n")
+    # print("X_test[0] flattened image:")
+    # print(X_test[0])
