@@ -3,6 +3,7 @@ import os
 import matplotlib.pyplot as plt
 import numpy as np
 import zipfile as zf
+import py7zr as un7
 from sklearn.svm import SVC
 from sklearn.preprocessing import StandardScaler
 from sklearn.pipeline import make_pipeline
@@ -101,8 +102,19 @@ def generate_data_fashion():
     dataset_dir = os.path.join(current_dir, data_dir_name)
 
     # Sets up the necessary filepaths and directories for Dataset directory
-    data_zip_name = "Image_Data_Fashion.zip"
-    data_zip_path = os.path.join(current_dir, data_zip_name)
+    data_zip_train_labels = "Training_Labels_Fashion.7z"
+    data_zip_train_images = "Training_Images_Fashion.7z"
+    data_zip_test_labels  = "Testing_Images_Fashion.7z"
+    data_zip_test_images  = "Testing_Labels_Fashion.7z"
+    data_zip_train_labels_path = os.path.join(current_dir, data_zip_train_labels)
+    data_zip_train_images_path = os.path.join(current_dir, data_zip_train_images)
+    data_zip_test_labels_path = os.path.join(current_dir, data_zip_test_labels)
+    data_zip_test_images_path = os.path.join(current_dir, data_zip_test_images)
+
+    data_set_train_labels_path = os.path.join(dataset_dir, data_zip_train_labels)
+    data_set_train_images_path = os.path.join(dataset_dir, data_zip_train_images)
+    data_set_test_labels_path = os.path.join(dataset_dir, data_zip_test_labels)
+    data_set_test_images_path = os.path.join(dataset_dir, data_zip_test_images)
     
     # First checks if the dataset directory has items or not
     # I.e. if the zip file has already been extraced into the directory
@@ -110,8 +122,22 @@ def generate_data_fashion():
     if not empty_check:
         print("Dataset Directory is empty, populating with necessary data...")
         # Unzips the Dataset and extracts it into the Dataset directory
-        with zf.ZipFile(data_zip_path, 'r') as img_zip:
-            img_zip.extractall(current_dir)
+        if not os.path.exists(data_set_train_labels_path):
+            with un7.SevenZipFile(data_zip_train_labels_path, mode='r') as img_zip:
+                img_zip.extractall(dataset_dir)
+
+        if not os.path.exists(data_set_train_images_path):
+            with un7.SevenZipFile(data_zip_train_images_path, mode='r') as img_zip:
+                img_zip.extractall(dataset_dir)
+
+        if not os.path.exists(data_set_test_labels_path):
+            with un7.SevenZipFile(data_zip_test_labels_path, mode='r') as img_zip:
+                img_zip.extractall(dataset_dir)
+
+        if not os.path.exists(data_set_test_images_path):
+            with un7.SevenZipFile(data_zip_test_images_path, mode='r') as img_zip:
+                img_zip.extractall(dataset_dir)
+        
         print("Data has been populated!\n")
     else:
         print("Dataset has already been populated.\n")
