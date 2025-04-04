@@ -10,5 +10,5 @@ and Image_Data.zip
 
 Next, pip install idx2numpy  
 Next, pip install zipfile
-Next, pip install py7zr
+Next, pip install py7zr  
 Finally, profit
