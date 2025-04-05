@@ -1,12 +1,12 @@
 README file for Assignment 3
 
+(Fashion_Set_2.7z is a 7zip file only due to file sizing,  
+and unzipping .zips and .7zs are nicer)
 First, download 
 generate_data.py,
-Training_Labels_Fashion.7z
-Training_Images_Fashion.7z
-Testing_Images_Fashion.7z
-Testing_Labels_Fashion.7z,
-and Image_Data.zip  
+Fashion_Set_1.zip,  
+Fashion_Set_2.7z,  
+and Image_Data_Numbers.zip  
 
 Next, pip install idx2numpy  
 Next, pip install zipfile  
