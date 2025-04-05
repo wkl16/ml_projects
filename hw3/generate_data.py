@@ -8,6 +8,24 @@ from sklearn.svm import SVC
 from sklearn.preprocessing import StandardScaler
 from sklearn.pipeline import make_pipeline
 
+# Global Data
+
+# Set the n_features, test, and training points
+# for np.reshape
+n_features  = 784
+n_test_pts  = 10000
+n_train_pts = 60000
+
+# Current Working Directory
+current_dir = os.path.dirname(__file__)
+
+# Set filepaths for image data
+test_img_path  = f"t10k-images-idx3-ubyte"
+train_img_path = f"train-images-idx3-ubyte"
+test_lbl_path  = f"t10k-labels-idx1-ubyte"
+train_lbl_path = f"train-labels-idx1-ubyte"
+
+
 def generate_data_numbers():
     """Generates Numbers MNIST Data to be utilized in Assignment 3"""
     # Current Working Directory
@@ -18,7 +36,7 @@ def generate_data_numbers():
     data_dir_name = "Image_Data_Numbers"
     
     # Check for dataset dir. If does not exist, make for preprocessing.
-    print("Checking for Dataset Directory...")
+    print("Checking for Numbers Dataset Directory...")
     if not os.path.isdir(data_dir_name):
         print("Dataset Directory does not exist, creating directory...")
         os.mkdir(data_dir_name)
@@ -37,32 +55,29 @@ def generate_data_numbers():
     empty_check = os.listdir(dataset_dir)
     if not empty_check:
         print("Dataset Directory is empty, populating with necessary data...")
-        # Unzips the Dataset and extracts it into the Dataset directory
-        with zf.ZipFile(data_zip_path, 'r') as img_zip:
-            img_zip.extractall(current_dir)
-        print("Data has been populated!\n")
     else:
-        print("Dataset has already been populated.\n")
+        print("Dataset has already been populated/is only partially populated.")
+        print("Populating data...")
 
+    # Unzips the Dataset and extracts it into the Dataset directory
+    with zf.ZipFile(data_zip_path, 'r') as img_zip:
+        img_zip.extractall(current_dir)
+    
+    print("Data has been populated!\n")
 
     print("Formatting Data...")
-    # Set the n_features, test, and training points
-    # for np.reshape
-    n_features  = 784
-    n_test_pts  = 10000
-    n_train_pts = 60000
-    
+
     # Set filepaths for image data
-    test_img_path  = os.path.join(dataset_dir, f"t10k-images-idx3-ubyte")
-    train_img_path = os.path.join(dataset_dir, f"train-images-idx3-ubyte")
-    test_lbl_path  = os.path.join(dataset_dir, f"t10k-labels-idx1-ubyte")
-    train_lbl_path = os.path.join(dataset_dir, f"train-labels-idx1-ubyte")
+    num_test_img_path  = os.path.join(dataset_dir, test_img_path)
+    num_train_img_path = os.path.join(dataset_dir, train_img_path)
+    num_test_lbl_path  = os.path.join(dataset_dir, test_lbl_path)
+    num_train_lbl_path = os.path.join(dataset_dir, train_lbl_path)
     
     # Convert idx files to numpy arrays
-    test_images = idx2numpy.convert_from_file(test_img_path)
-    train_images = idx2numpy.convert_from_file(train_img_path)
-    test_labels = idx2numpy.convert_from_file(test_lbl_path)
-    train_labels = idx2numpy.convert_from_file(train_lbl_path)
+    test_images  = idx2numpy.convert_from_file(num_test_img_path)
+    train_images = idx2numpy.convert_from_file(num_train_img_path)
+    test_labels  = idx2numpy.convert_from_file(num_test_lbl_path)
+    train_labels = idx2numpy.convert_from_file(num_train_lbl_path)
 
     # Flatten testing and training images
     # Labels are already in the shape they need to be in
@@ -83,15 +98,13 @@ def generate_data_numbers():
 
 def generate_data_fashion():
     """Generates Fashion MNIST Data to be utilized in Assignment 3"""
-    # Current Working Directory
-    current_dir = os.path.dirname(__file__)
     
     # Specify dataset directory
     # Images MUST BE in this data directory
     data_dir_name = "Image_Data_Fashion"
     
     # Check for dataset dir. If does not exist, make for preprocessing.
-    print("Checking for Dataset Directory...")
+    print("Checking for Fashion Dataset Directory...")
     if not os.path.isdir(data_dir_name):
         print("Dataset Directory does not exist, creating directory...")
         os.mkdir(data_dir_name)
@@ -101,66 +114,42 @@ def generate_data_fashion():
     
     dataset_dir = os.path.join(current_dir, data_dir_name)
 
-    # Sets up the necessary filepaths and directories for Dataset directory
-    data_zip_train_labels = "Training_Labels_Fashion.7z"
-    data_zip_train_images = "Training_Images_Fashion.7z"
-    data_zip_test_labels  = "Testing_Images_Fashion.7z"
-    data_zip_test_images  = "Testing_Labels_Fashion.7z"
-    data_zip_train_labels_path = os.path.join(current_dir, data_zip_train_labels)
-    data_zip_train_images_path = os.path.join(current_dir, data_zip_train_images)
-    data_zip_test_labels_path = os.path.join(current_dir, data_zip_test_labels)
-    data_zip_test_images_path = os.path.join(current_dir, data_zip_test_images)
+    data_set_train_labels_path = os.path.join(dataset_dir, test_img_path)
+    data_set_train_images_path = os.path.join(dataset_dir, train_img_path)
+    data_set_test_labels_path  = os.path.join(dataset_dir, test_lbl_path) 
+    data_set_test_images_path  = os.path.join(dataset_dir, train_lbl_path)
 
-    data_set_train_labels_path = os.path.join(dataset_dir, data_zip_train_labels)
-    data_set_train_images_path = os.path.join(dataset_dir, data_zip_train_images)
-    data_set_test_labels_path = os.path.join(dataset_dir, data_zip_test_labels)
-    data_set_test_images_path = os.path.join(dataset_dir, data_zip_test_images)
+    # Sets up the necessary filepaths and directories for Dataset directory
+    data_zip_set_1 = "Fashion_Set_1.zip"
+    data_zip_set_2 = "Fashion_Set_2.7z"
+    data_zip_set_1_path = os.path.join(current_dir, data_zip_set_1)
+    data_zip_set_2_path = os.path.join(current_dir, data_zip_set_2)
     
     # First checks if the dataset directory has items or not
     # I.e. if the zip file has already been extraced into the directory
     empty_check = os.listdir(dataset_dir)
     if not empty_check:
         print("Dataset Directory is empty, populating with necessary data...")
-        # Unzips the Dataset and extracts it into the Dataset directory
-        if not os.path.exists(data_set_train_labels_path):
-            with un7.SevenZipFile(data_zip_train_labels_path, mode='r') as img_zip:
-                img_zip.extractall(dataset_dir)
-
-        if not os.path.exists(data_set_train_images_path):
-            with un7.SevenZipFile(data_zip_train_images_path, mode='r') as img_zip:
-                img_zip.extractall(dataset_dir)
-
-        if not os.path.exists(data_set_test_labels_path):
-            with un7.SevenZipFile(data_zip_test_labels_path, mode='r') as img_zip:
-                img_zip.extractall(dataset_dir)
-
-        if not os.path.exists(data_set_test_images_path):
-            with un7.SevenZipFile(data_zip_test_images_path, mode='r') as img_zip:
-                img_zip.extractall(dataset_dir)
-        
-        print("Data has been populated!\n")
     else:
-        print("Dataset has already been populated.\n")
+        print("Dataset has already been populated/is only partially populated.")
+        print("Populating data...")
 
+    # Unzips the Dataset and extracts it into the Dataset directory
+    with zf.ZipFile(data_zip_set_1_path, 'r') as img_zip:
+        img_zip.extractall(dataset_dir)
+
+    with un7.SevenZipFile(data_zip_set_2_path, mode='r') as img_zip:
+        img_zip.extractall(dataset_dir)
+
+    print("Data has been populated!\n")
 
     print("Formatting Data...")
-    # Set the n_features, test, and training points
-    # for np.reshape
-    n_features  = 784
-    n_test_pts  = 10000
-    n_train_pts = 60000
-    
-    # Set filepaths for image data
-    test_img_path  = os.path.join(dataset_dir, f"t10k-images-idx3-ubyte")
-    train_img_path = os.path.join(dataset_dir, f"train-images-idx3-ubyte")
-    test_lbl_path  = os.path.join(dataset_dir, f"t10k-labels-idx1-ubyte")
-    train_lbl_path = os.path.join(dataset_dir, f"train-labels-idx1-ubyte")
     
     # Convert idx files to numpy arrays
-    test_images = idx2numpy.convert_from_file(test_img_path)
-    train_images = idx2numpy.convert_from_file(train_img_path)
-    test_labels = idx2numpy.convert_from_file(test_lbl_path)
-    train_labels = idx2numpy.convert_from_file(train_lbl_path)
+    test_images = idx2numpy.convert_from_file (data_set_train_labels_path)
+    train_images = idx2numpy.convert_from_file(data_set_train_images_path)
+    test_labels = idx2numpy.convert_from_file (data_set_test_labels_path)
+    train_labels = idx2numpy.convert_from_file(data_set_test_images_path)
 
     # Flatten testing and training images
     # Labels are already in the shape they need to be in
