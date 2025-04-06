@@ -45,8 +45,8 @@ if __name__ == "__main__":
     cumulative_variance.append(np.cumsum(pca200_train.explained_variance_ratio_))
 
     print("Cumulative variance of principal components at 50:", cumulative_variance[0][-1])
-    print("Cumulative variance of principal components to 100:", cumulative_variance[1][-1])
-    print("Cumulative variance of principal components to 200:", cumulative_variance[2][-1])
+    print("Cumulative variance of principal components at 100:", cumulative_variance[1][-1])
+    print("Cumulative variance of principal components at 200:", cumulative_variance[2][-1])
 
     fig, axs = plt.subplots(3, 1)
 
