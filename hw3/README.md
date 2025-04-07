@@ -16,6 +16,8 @@ Image_Data_Fashion
 If you are having trouble unzipping these files, you will need to go to the  
 MNIST Fashion repository linked in the assignment, and unzip them accordingly.  
 IT IS VERY IMPORTANT THAT THE IDX FILES ARE IN THE DIRECTORIES AS FOLLOWS.  
+Refer to the pngs to see what the directories should look like.  
+Image_Data_Number's idx files are going to be smaller than Image_Data_Fashion's idx files.  
   
 Next, pip install idx2numpy  
 
