@@ -44,17 +44,19 @@ if __name__ == "__main__":
     cumulative_variance.append(np.cumsum(pca100_train.explained_variance_ratio_))
     cumulative_variance.append(np.cumsum(pca200_train.explained_variance_ratio_))
 
+    print("Best individual principal components:", cumulative_variance[0][0])
     print("Cumulative variance of principal components at 50:", cumulative_variance[0][-1])
     print("Cumulative variance of principal components at 100:", cumulative_variance[1][-1])
     print("Cumulative variance of principal components at 200:", cumulative_variance[2][-1])
 
     fig, axs = plt.subplots(3, 1)
-
     for i, n in enumerate(dimensions):
-        axs[i].plot(range(1, n+1), cumulative_variance[i], marker='o')
+        #axs[i].plot(range(1, n+1), cumulative_variance[i], marker='o')
+        axs[i].bar(range(1, n+1), variance_ratio[i], align='center', label='Individual explained variance')
+        axs[i].step(range(1, n+1), cumulative_variance[i], where='mid', label='Cumulative explained variance')
         axs[i].set_title(f'Cumulative Variance for {n} Principal Components')
-        axs[i].set_xlabel('Number of Principal Components')
-        axs[i].set_ylabel('Cumulative Variance')
+        axs[i].set_xlabel('Principal components index')
+        axs[i].set_ylabel('Explained variance ratio')
         axs[i].grid(True)
 
     plt.tight_layout()
