@@ -50,14 +50,20 @@ if __name__ == "__main__":
     print("Cumulative variance of principal components at 200:", cumulative_variance[2][-1])
 
     fig, axs = plt.subplots(3, 1)
+    j = .8
+    k = 0.55
     for i, n in enumerate(dimensions):
         #axs[i].plot(range(1, n+1), cumulative_variance[i], marker='o')
         axs[i].bar(range(1, n+1), variance_ratio[i], align='center', label='Individual explained variance')
         axs[i].step(range(1, n+1), cumulative_variance[i], where='mid', label='Cumulative explained variance')
-        axs[i].set_title(f'Cumulative Variance for {n} Principal Components')
+        axs[i].text(variance_ratio[i][0]+j, variance_ratio[i][0], f'{variance_ratio[i][0]:.2f}', ha='center', va='bottom', fontsize=10, color='blue')
+        axs[i].text(n+k, cumulative_variance[i][-1]-.06, f'{cumulative_variance[i][-1]:.2f}', ha='center', va='bottom',fontsize=10, color='green')
+        axs[i].set_title(f'Total Variance Captured by {n} Principal Components')
         axs[i].set_xlabel('Principal components index')
         axs[i].set_ylabel('Explained variance ratio')
         axs[i].grid(True)
+        j -= .8
+        k += 1
 
     plt.tight_layout()
     plt.show()
