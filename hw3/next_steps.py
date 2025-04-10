@@ -12,7 +12,7 @@ import matplotlib.pyplot as plt
 def numbers_PCA():
     X_train, X_test, y_train, y_test = generate_data_numbers()
 
-    print("Creating PCA's")
+    print("Creating PCA's for Numbers Dataset")
     #Training Dataset
     dimensions = [50, 100, 200]
     pca50_train = PCA(n_components=dimensions[0])
@@ -55,9 +55,10 @@ def numbers_PCA():
         axs[i].step(range(1, n+1), cumulative_variance[i], where='mid', label='Cumulative explained variance')
         axs[i].text(variance_ratio[i][0]+j, variance_ratio[i][0], f'{variance_ratio[i][0]:.2f}', ha='center', va='bottom', fontsize=10, color='blue')
         axs[i].text(n+k, cumulative_variance[i][-1]-.06, f'{cumulative_variance[i][-1]:.2f}', ha='center', va='bottom',fontsize=10, color='green')
-        axs[i].set_title(f'Total Variance Captured by {n} Principal Components')
+        axs[i].set_title(f'Total Variance Captured by {n} Principal Components for Numbers Dataset')
         axs[i].set_xlabel('Principal components index')
         axs[i].set_ylabel('Explained variance ratio')
+        axs[i].legend(loc='lower right')
         axs[i].grid(True)
         j -= .8
         k += 1
@@ -68,7 +69,7 @@ def numbers_PCA():
 def fashion_PCA():
     X_train, X_test, y_train, y_test = generate_data_fashion()
 
-    print("Creating PCA's")
+    print("Creating PCA's for Fashion Dataset")
     #Training Dataset
     dimensions = [50, 100, 200]
     pca50_train = PCA(n_components=dimensions[0])
@@ -111,9 +112,10 @@ def fashion_PCA():
         axs[i].step(range(1, n+1), cumulative_variance[i], where='mid', label='Cumulative explained variance')
         axs[i].text(variance_ratio[i][0]+j, variance_ratio[i][0], f'{variance_ratio[i][0]:.2f}', ha='center', va='bottom', fontsize=10, color='blue')
         axs[i].text(n+k, cumulative_variance[i][-1]-.06, f'{cumulative_variance[i][-1]:.2f}', ha='center', va='bottom',fontsize=10, color='green')
-        axs[i].set_title(f'Total Variance Captured by {n} Principal Components')
+        axs[i].set_title(f'Total Variance Captured by {n} Principal Components for Fashion Dataset')
         axs[i].set_xlabel('Principal components index')
         axs[i].set_ylabel('Explained variance ratio')
+        axs[i].legend(loc='lower right')
         axs[i].grid(True)
         j -= .8
         k += 1
