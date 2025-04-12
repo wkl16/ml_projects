@@ -4,7 +4,6 @@ from generate_data import generate_data_numbers
 from generate_data import generate_data_fashion
 from sklearn.svm import SVC
 from sklearn.preprocessing import StandardScaler
-from sklearn.pipeline import make_pipeline
 from sklearn.decomposition import PCA
 import matplotlib.pyplot as plt
 
