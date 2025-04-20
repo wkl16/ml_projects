@@ -6,7 +6,7 @@ Run generate_data.py, and see results.
 The function process_data() processes the data from the acmlImdb directory,  
 and runs it through a very basic FNN (accuracy is really bad)  
 
-- Note from Matt -
+__Note from Matt__
 Not sure if data is properly being preprocessed, but figured
 not to go any further in the tuning of parameters
 outside of what is present in order for us to see more tangible
@@ -18,4 +18,4 @@ results of training. Potential issues could be of the following:
   in class demonstration of FNNs)
 - Too few features from tfidf Vectorization
 
-- End note from Matt -
+__End note from Matt__
