@@ -16,5 +16,6 @@ results of training. Potential issues could be of the following:
 - Using the wrong type of loss function
 - testing and training are not done in correct manner (though I based it off of
   in class demonstration of FNNs)
-- Too few features from tfidf Vectorization  
+- Too few features from tfidf Vectorization
+
 __End note from Matt__
