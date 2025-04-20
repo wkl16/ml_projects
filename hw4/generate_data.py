@@ -102,8 +102,14 @@ def process_data():
     
     # Limit max features to roughly half of what it 
     # would originally generate with this vectorizer
+    # Change max_features to include more features for
+    # processing. 50000 features went to about 2-3 hours
+    # Original size from a very initial test was around
+    # 100000 features. If you change this, change the scale
+    # of the FNN and change the input in net.forward()
+    # to also match this number.
     tfidf = TfidfVectorizer(max_features=10000, strip_accents=None, lowercase=False, preprocessor=preprocessor, tokenizer=tokenizer_porter, stop_words='english')
-
+    
     # Vectorize the review data and turn it into something
     # that the TensorDataset can ingest
     # Also vectorize test data to test on finished model
