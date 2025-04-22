@@ -175,7 +175,7 @@ def process_data():
     # Train. It's doing something and it takes a while. I got to take a shower and it barely finished the
     # Second epoch. So to finish 5 epochs, likely 1 hour and 30 minutes.
     print("\n5. starting training...")
-    print("Epoch | Training Loss | Test Accuracy")
+    print("Epoch | Training Loss | Test Accuracy | Time")
     print("-" * 40)
     
     for epoch in range(5):
