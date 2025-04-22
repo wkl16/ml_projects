@@ -168,7 +168,7 @@ def process_data():
             y_pred = torch.argmax(y_pred, dim=1)
             acc = accuracy_score(y_test, y_pred)
             print(acc)
-    
+    '''
     torch.onnx.export(
         net,
         (tfidf_reviews_norm,),
@@ -176,6 +176,7 @@ def process_data():
         input_names=["reviews"],
         dynamo=True
     )
+    '''
 
 
 if __name__ == "__main__":
