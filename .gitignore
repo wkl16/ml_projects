@@ -4,3 +4,6 @@
 *.txt
 *.csv
 *ubyte
+hw4/cs429/*
+hw4/cs429_hw4_env/*
+hw4/aclImdb/*
