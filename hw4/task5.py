@@ -1,8 +1,7 @@
 ## Training using Dropout Regularization
 
 import time
-#import os
-#import torch
+import torch
 import matplotlib.pyplot as plt
 from sklearn.feature_extraction.text import TfidfVectorizer
 
@@ -10,8 +9,7 @@ from generate_data import generate_df_from_reviews
 from generate_data import preprocessor
 from generate_data import tokenizer_porter
 
-# import FNN from task 2
-
+# functions
 def process_data():
     start_time = time.time()
 
@@ -143,16 +141,107 @@ def process_data():
     '''
     return acc_list, total_training_time
 
+ 
+def pre_process_data():
+
+    # Generate DataFrame Object where data is stored
+    print("\n1. Loading dataset...")
+    df = generate_df_from_reviews()
+    print(f"Total number of reviews in dataset: {len(df)}")
+
+    # 70-30 split
+    # X_train = df.loc[:35000, 'review'].values
+    # X_test = df.loc[15000:, 'review'].values
+    # y_train = df.loc[:35000, 'sentiment'].values
+    # y_test = df.loc[15000:, 'sentiment'].values
+
+    #
+    split_idx = 35000
+    X_train = df.loc[:split_idx - 1, 'review'].values
+    X_test = df.loc[split_idx:, 'review'].values
+    y_train = df.loc[:split_idx - 1, 'sentiment'].values
+    y_test = df.loc[split_idx:, 'sentiment'].values
+    # data leakage due to overlap from row 15000 through 35000 between training and testing data!
+
+    #print(f"Training set size: {len(X_train)}")
+    #print(f"Test set size: {len(X_test)}")
+
+    features = [50000]
+    learning_rate = [0.01]
+    L2 = [0.01]
+    y_train = torch.from_numpy(y_train).long()
+
+    for i in features:
+        tfidf = TfidfVectorizer(max_features=i, strip_accents=None, lowercase=False,
+                                preprocessor=preprocessor,
+                                tokenizer=tokenizer_porter, stop_words='english')
+
+        # Vectorize the review data and turn it into something
+        # that the TensorDataset can ingest
+        # Also vectorize test data to test on finished model
+        tfidf_reviews = tfidf.fit_transform(X_train).toarray()
+
+        # tfidf_testing = tfidf.fit_transform(X_test).toarray()
+        tfidf_testing = tfidf.transform(X_test).toarray()
+        # doesn't need to fit the vectorizer again, test data should be vectorized using the same vocab and transform learned from the training data
+
+        tfidf_reviews_norm = (tfidf_reviews - np.mean(tfidf_reviews)) / np.std(tfidf_reviews)
+        tfidf_testing_norm = (tfidf_testing - np.mean(tfidf_testing)) / np.std(tfidf_testing)
+        # print(tfidf_reviews_norm[1])
+        # print(tfidf_reviews_norm.shape)
+
+        # Float for the reviews, as the array is likely to have floats rather than ints
+        # long for the sentiments to properly gauge positive or negative
+        tfidf_reviews_norm = torch.from_numpy(tfidf_reviews_norm).float()
+        tfidf_testing_norm = torch.from_numpy(tfidf_testing_norm).float()
+
+        # Initialize the dataset and load it into the dataloader
+        train_ds = TensorDataset(tfidf_reviews_norm, y_train)
+        review_data = DataLoader(train_ds, batch_size=100, shuffle=True)
+        #fnn(review_data, tfidf_testing_norm, y_test, i, 0.1, 0)
+        for j in learning_rate:
+            for k in L2:
+                fnn(review_data, tfidf_testing_norm, y_test, i, j, k)
+    '''
+    torch.onnx.export(
+        net,
+        (tfidf_reviews_norm,),
+        "Movie_Review_Model.onnx",
+        input_names=["reviews"],
+        dynamo=True
+    )
+    '''
+
 
 # using max features = 10000, epochs = 8 for all
 
+# import FNN from task 2
 base_acc, base_time = process_data()
 
 # using PyTorch function dropout
 # may tune the dropout probability for each layer
 
 # Create a single dropout model and compare its performance to the baseline model
-
+def gen_single_dropout():
+    # layers
+    net_single_dropout = torch.nn.Sequential(
+        torch.nn.Linear(10000, 5000),
+        torch.nn.ReLU(),
+        torch.nn.Dropout(p=0.5),
+        torch.nn.Linear(5000, 5000),
+        torch.nn.ReLU(),
+        torch.nn.Dropout(p=0.5),
+        torch.nn.Linear(5000, 5000),
+        torch.nn.ReLU(),
+        torch.nn.Dropout(p=0.5),
+        torch.nn.Linear(5000, 2500),
+        torch.nn.ReLU(),
+        torch.nn.Dropout(p=0.5),
+        torch.nn.Linear(2500, 2),
+        torch.nn.Softmax(dim=1))
+    
+    optimizer_single_dropout = torch.optim.SGD(net_single_dropout.parameters(), lr=0.1)
+    L_single_dropout = torch.nn.CrossEntropyLoss()
 
 # Create a set of at least 5 different dropout models, train them using bagging 
 
