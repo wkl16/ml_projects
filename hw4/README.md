@@ -8,21 +8,9 @@ in the root directory of this repository:
 - torch
 - nltk
   
-Run generate_data.py, and see results.  
+Run generate_data.py, and see results. (Task 2)  
 The function process_data() processes the data from the acmlImdb directory,  
-and runs it through a very basic FNN (accuracy is really bad)  
-
-__Note from Matt__  
-Not sure if data is properly being preprocessed, but figured
-not to go any further in the tuning of parameters
-outside of what is present in order for us to see more tangible
-results of training. Potential issues could be of the following:
-- The data is not being preprocessed correctly
-- The model is too simple
-- Using the wrong type of loss function
-- testing and training are not done in correct manner (though I based it off of
-  in class demonstration of FNNs)
-- Too few features from tfidf Vectorization
-- Obvious one - Hyperparameters have not been tuned at all
-
-__End note from Matt__
+and runs it through a FNN similar to the one seen in lecture.  
+generate_data.py was modified by Leo Wang to ensure the correct  
+splitting of data, and providing more metrics to compare the performance  
+of the FNN with. 
