@@ -106,18 +106,18 @@ def process_data():
     # X_test = df.loc[15000:, 'review'].values
     # y_train = df.loc[:35000, 'sentiment'].values
     # y_test = df.loc[15000:, 'sentiment'].values
+    # ^ Old, bad split, caused very bad accuracy ^
+    # data leakage due to overlap from row 15000 through 35000 between training and testing data!
     
-    # 
+    # New, proper 70-30 split from Leo Wang
     split_idx = 35000
     X_train = df.loc[:split_idx-1, 'review'].values
     X_test = df.loc[split_idx:, 'review'].values
     y_train = df.loc[:split_idx-1, 'sentiment'].values
     y_test = df.loc[split_idx:, 'sentiment'].values
-    # data leakage due to overlap from row 15000 through 35000 between training and testing data! 
 
     print(f"Training set size: {len(X_train)}")
     print(f"Test set size: {len(X_test)}")
-    
     
     # Limit max features to roughly half of what it 
     # would originally generate with this vectorizer
@@ -135,13 +135,11 @@ def process_data():
     tfidf_reviews = tfidf.fit_transform(X_train).toarray()
     
     # tfidf_testing = tfidf.fit_transform(X_test).toarray()
-    tfidf_testing = tfidf.transform(X_test).toarray() 
+    tfidf_testing = tfidf.transform(X_test).toarray()
     # doesn't need to fit the vectorizer again, test data should be vectorized using the same vocab and transform learned from the training data
 
     tfidf_reviews_norm = (tfidf_reviews - np.mean(tfidf_reviews)) / np.std(tfidf_reviews)
     tfidf_testing_norm = (tfidf_testing - np.mean(tfidf_testing)) / np.std(tfidf_testing)
-    # print(tfidf_reviews_norm[1])
-    # print(tfidf_reviews_norm.shape)
 
     # Float for the reviews, as the array is likely to have floats rather than ints
     # long for the sentiments to properly gauge positive or negative
@@ -200,22 +198,12 @@ def process_data():
             y_pred = net(tfidf_testing_norm)
             y_pred = torch.argmax(y_pred, dim=1)
             acc = accuracy_score(y_test, y_pred)
-            # print(acc)
             epoch_time = time.time() - epoch_start
             print(f"{epoch+1:5d} | {avg_loss:.6f} | {acc:.6f} | {epoch_time:.2f}s")
 
     total_time = time.time() - start_time
     print(f"\n Training completed in {total_time/60:.2f} minutes")
     print(f"Final test accuracy: {acc:.4f}")
-    '''
-    torch.onnx.export(
-        net,
-        (tfidf_reviews_norm,),
-        "Movie_Review_Model.onnx",
-        input_names=["reviews"],
-        dynamo=True
-    )
-    '''
 
 
 if __name__ == "__main__":
