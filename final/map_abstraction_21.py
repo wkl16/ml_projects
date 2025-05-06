@@ -24,12 +24,15 @@ class Map_Abstraction:
 
         return output
 
-    def show_plot(self, matrix, show_grid=False):
-        plt.figure(figsize=(8, 8))
-        plt.imshow(matrix, cmap='gray_r', interpolation='nearest', vmin=0, vmax=1)
+    def show_plot(self, matrix, show_grid=False):       
+        fig = plt.subplots(figsize=(8, 8))
+        fig.imshow(matrix, cmap='gray_r', interpolation='nearest', vmin=0, vmax=1)
+
         if show_grid:
             y_size, x_size = matrix.shape
-            plt.xticks(np.arange(-0.5, x_size, 1), minor=True, color='gray')
-            plt.yticks(np.arange(-0.5, y_size, 1), [], color='gray')
-            plt.grid(which='both', color='gray', linewidth=.5)
+            fig.set_xticks(np.arange(-0.5, x_size, 1), minor=True)
+            fig.set_yticks(np.arange(-0.5, y_size, 1), minor=True)
+            fig.grid(which='minor', color='gray', linewidth=0.5)
+            fig.tick_params(which='minor', size=0) 
+
         plt.show()

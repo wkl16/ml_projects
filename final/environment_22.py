@@ -41,22 +41,22 @@ class Environment:
         agent_location = self.where_am_i(state)
         agent_row = agent_location[0]
         agent_col = agent_location[1]
-        match action:
-            case "left":
-                requestX_pos = agent_col - 1
-                requestY_pos = agent_row
-            case "right":
-                requestX_pos = agent_col + 1
-                requestY_pos = agent_row
-            case "up":
-                requestX_pos = agent_col
-                requestY_pos = agent_row - 1
-            case "down":
-                requestX_pos = agent_col
-                requestY_pos = agent_row + 1
-            case _:
-                requestX_pos = agent_col
-                requestY_pos = agent_row
+        
+        if action == "left":
+            requestX_pos = agent_col - 1
+            requestY_pos = agent_row
+        elif action == "right":
+            requestX_pos = agent_col + 1
+            requestY_pos = agent_row
+        elif action == "up":
+            requestX_pos = agent_col
+            requestY_pos = agent_row - 1
+        elif action == "down":
+            requestX_pos = agent_col
+            requestY_pos = agent_row + 1
+        else:
+            requestX_pos = agent_col
+            requestY_pos = agent_row
 
         if not self.validate_move(requestX_pos, requestY_pos):
             reward = self.negative_reward
