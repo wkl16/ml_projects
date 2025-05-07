@@ -26,7 +26,7 @@ step = np.linspace(0, delta)
 # Environment Class
 class CruiseEnv:
     # Initialize everything
-    def __init__(self, discretize_val=21, neg_reward=-50, no_reward=0, pos_reward=50, s0=(1,-1)):
+    def __init__(self, discretize_val=51, neg_reward=-50, no_reward=0, pos_reward=50, s0=(1,0)):
         self.discretize_val = discretize_val
         self.neg_reward = neg_reward
         self.no_reward = no_reward
@@ -50,7 +50,7 @@ class CruiseEnv:
     # return indices of position and velocity
     def map_indexes(self, state):
         pos_idx = int(round((state[0] - self.X[0]) / self.x_sp))
-        vel_idx = int(round((state[1] - self.V[1]) / self.v_sp))
+        vel_idx = int(round((state[1] - self.V[0]) / self.v_sp))
 
         return pos_idx, vel_idx
     
@@ -66,7 +66,7 @@ class CruiseEnv:
         ode_result = odeint(model, self.s0, step, args=(u,))
 
         # get mapped result, this may be the problem
-        pos_idx, vel_idx = self.map_indexes(ode_result[0])
+        pos_idx, vel_idx = self.map_indexes(ode_result[-1])
         
         # initialize out of bounds param
         out_of_bounds = False
@@ -92,9 +92,14 @@ class CruiseEnv:
         else:
             if (pos_idx == (self.discretize_val // 2) and vel_idx == (self.discretize_val // 2)):
                 reward = self.pos_reward
-
+        
         # get new state based off of ode
-        new_state = (self.X[pos_idx], self.V[vel_idx])
+        # check also if current state already at (0,0)
+        if (self.s0 == (0,0)):
+            reward = self.pos_reward
+            new_state = self.s0
+        else:
+            new_state = (self.X[pos_idx], self.V[vel_idx])
         
         # update state
         self.s0 = new_state
@@ -107,7 +112,7 @@ class CruiseEnv:
 # Agent class
 class Agent_007():
     # Initialize Everything
-    def __init__(self, env, learning_rate=0.001, discount_factor=0.9, epsilon_greedy=0.9, epsilon_min=0.001, epsilon_decay=0.95):
+    def __init__(self, env, learning_rate=0.01, discount_factor=0.9, epsilon_greedy=0.9, epsilon_min=0.001, epsilon_decay=0.95):
         self.env       = env
         self.actions   = control_inputs
         self.nA        = len(self.actions)
