@@ -24,7 +24,7 @@ step = np.linspace(0, delta)
 ### ^^ Necessary for calculating next state ^^ ###
 
 # Environment Class
-class CruiseEnv:
+class ParkinEnv:
     # Initialize everything
     def __init__(self, discretize_val=51, neg_reward=-50, no_reward=0, pos_reward=50, s0=(1,0)):
         self.discretize_val = discretize_val
