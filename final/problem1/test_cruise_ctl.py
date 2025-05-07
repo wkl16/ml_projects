@@ -54,6 +54,6 @@ def q_learn_stuff(agent, env, num_episodes=10000):
     return history
 
 if __name__ == "__main__":
-    env = CruiseEnv()
+    env = ParkinEnv()
     agent = Agent_007(env)
     history = q_learn_stuff(agent, env)
