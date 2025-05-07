@@ -5,7 +5,7 @@ import time
 import numpy as np
 import matplotlib.pyplot as plt
 from collections import namedtuple
-from EnvAgt import CruiseEnv
+from EnvAgt import ParkinEnv
 from EnvAgt import Agent_007
 
 np.random.seed(42)
