@@ -5,7 +5,7 @@ import numpy as np
 ### vv Section for globals vv ###
 
 np.random.seed(42)
-control_inputs = np.array([-5, -1. -0.1, -0.01, -0.001, -0.0001, 0, 0.0001, 0.001, 0.01, 0.1, 1, 5])
+control_inputs = np.array([-5, -1, -0.1, -0.01, -0.001, -0.0001, 0, 0.0001, 0.001, 0.01, 0.1, 1, 5])
 
 ### ^^ Section for Globals ^^ ###
 
@@ -56,6 +56,10 @@ class ParkinEnv:
     
     # Interact with environment and give positive/negative reward
     def interact(self, control):
+        # Check if already at goal first
+        if self.s0 == (0,0):
+            return self.s0, self.pos_reward
+
         # initialize neutral reward
         reward = self.no_reward
 
@@ -94,12 +98,7 @@ class ParkinEnv:
                 reward = self.pos_reward
         
         # get new state based off of ode
-        # check also if current state already at (0,0)
-        if (self.s0 == (0,0)):
-            reward = self.pos_reward
-            new_state = self.s0
-        else:
-            new_state = (self.X[pos_idx], self.V[vel_idx])
+        new_state = (self.X[pos_idx], self.V[vel_idx])
         
         # update state
         self.s0 = new_state
@@ -108,6 +107,7 @@ class ParkinEnv:
     # Reset s0
     def reset(self):
         self.s0 = self.s0_copy
+        return self.s0
 
 # Agent class
 class Agent_007():
@@ -125,6 +125,7 @@ class Agent_007():
 
     # Choose a random action on self.actions
     def choose_action(self, state):
+        # 
         if np.random.uniform() < self.eps:
             action = np.random.choice(self.nA)
         else:
