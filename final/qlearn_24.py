@@ -42,6 +42,7 @@ def qlearn (lr, df, num_episodes, max_ep_len, env):
     
         history.append((n_moves, final_reward))
         pbar.update()
+
         #print(f'Episode {episode}: Reward {final_reward:.2f}, #Moves {n_moves}')
     
     #print(pbar)
@@ -53,5 +54,5 @@ if __name__ == '__main__':
     np_img_array = ma.abstract("./maps/map2.bmp", 40, 40)
     # CHANGE MAP HERE
     env = Environment(np_img_array, 0, 0, 38, 38)
-    history = qlearn(0.01, 0.9, 50, 60000, env)
+    history = qlearn(0.01, 0.9, 300, 30000, env)
     plot_learning_history(history)
