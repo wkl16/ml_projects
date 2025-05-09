@@ -28,18 +28,16 @@ def q_learn_stuff(agent, env, num_episodes=10000):
             action_idx = agent.choose_action(state)
             action = agent.actions[action_idx]
             next_state, reward = env.interact(action)
-            done = reward == env.pos_reward
+            time_t += 0.5
+            done = time_t >= 20
             agent._learn(Transition(state, action_idx, reward, next_state, done))
             state = next_state
             final_reward = reward
-            time_t += 0.5
-            if (time_t >= 20):
-                break
         
-        if final_reward == 0.0:
-            num_neu = num_neu + 1
-        elif final_reward < 0:
+        if final_reward <= -100:
             num_neg = num_neg + 1
+        elif final_reward < 0:
+            num_neu = num_neu + 1
         else:
             num_pos = num_pos + 1
 
