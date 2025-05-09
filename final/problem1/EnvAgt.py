@@ -26,10 +26,10 @@ step = np.linspace(0, delta)
 # Environment Class
 class ParkinEnv:
     # Initialize everything
-    def __init__(self, discretize_val=51, neg_reward=-50, no_reward=0, pos_reward=50, s0=(1,0)):
+    def __init__(self, discretize_val=51, neg_reward=-100, neutral_reward=-2, pos_reward=50, s0=(1,0)):
         self.discretize_val = discretize_val
         self.neg_reward = neg_reward
-        self.no_reward = no_reward
+        self.neutral_reward = neutral_reward
         self.pos_reward = pos_reward
         self.s0 = s0
         self.s0_copy = s0
@@ -61,7 +61,7 @@ class ParkinEnv:
             return self.s0, self.pos_reward
 
         # initialize neutral reward
-        reward = self.no_reward
+        reward = self.neutral_reward
 
         # control var for odeint
         u = control
