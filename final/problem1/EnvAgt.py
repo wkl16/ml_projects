@@ -56,9 +56,6 @@ class ParkinEnv:
     
     # Interact with environment and give positive/negative reward
     def interact(self, control):
-        # Check if already at goal first
-        if self.s0 == (0,0):
-            return self.s0, self.pos_reward
 
         # initialize neutral reward
         reward = self.neutral_reward
