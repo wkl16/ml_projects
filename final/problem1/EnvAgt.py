@@ -26,7 +26,7 @@ step = np.linspace(0, delta)
 # Environment Class
 class ParkinEnv:
     # Initialize everything
-    def __init__(self, discretize_val=51, neg_reward=-100, neutral_reward=-2, pos_reward=50, s0=(1,0)):
+    def __init__(self, discretize_val=51, neg_reward=-100, neutral_reward=-2, pos_reward=50, s0=(1,-1)):
         self.discretize_val = discretize_val
         self.neg_reward = neg_reward
         self.neutral_reward = neutral_reward
@@ -56,6 +56,9 @@ class ParkinEnv:
     
     # Interact with environment and give positive/negative reward
     def interact(self, control):
+        # Check if already at goal first
+        # if self.s0 == (0,0):
+        #     return self.s0, self.pos_reward
 
         # initialize neutral reward
         reward = self.neutral_reward
@@ -91,8 +94,11 @@ class ParkinEnv:
             reward = self.neg_reward
         # Reward if got to pos 0 vel 0
         else:
-            if (pos_idx == (self.discretize_val // 2) and vel_idx == (self.discretize_val // 2)):
-                reward = self.pos_reward
+            if self.s0 == (0,0):
+                if (pos_idx == (self.discretize_val // 2) and vel_idx == (self.discretize_val // 2)):
+                    reward = self.pos_reward
+                else:
+                    reward = self.neg_reward * 2
         
         # get new state based off of ode
         new_state = (self.X[pos_idx], self.V[vel_idx])
@@ -100,6 +106,9 @@ class ParkinEnv:
         # update state
         self.s0 = new_state
         return new_state, reward 
+    
+    def get_state(self):
+        return self.s0
     
     # Reset s0
     def reset(self):
@@ -150,3 +159,6 @@ class Agent_007():
     def _adjust_epsilon(self):
         if self.eps > self.eps_min:
             self.eps *= self.eps_decay
+
+    def get_env(self):
+        return self.env
