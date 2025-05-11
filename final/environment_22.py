@@ -177,7 +177,7 @@ class Environment:
         print(self.env_map)
 
     def reset(self):
-        """Reset environment for next .
+        """Reset environment for next episode.
         Returns
         -------
         env_map : 2d numpy array
