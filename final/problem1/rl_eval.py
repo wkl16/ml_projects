@@ -135,8 +135,8 @@ class RLEvaluator:
             velocities.append(next_state[1])
             times.append(t)
             state = next_state
-            if reward == env.pos_reward:
-                break
+            # if reward == env.pos_reward:
+            #     break
         if epsilon is not None:
             agent.eps = old_eps  # Restore original epsilon
         plt.figure(figsize=(8, 5))
@@ -152,7 +152,7 @@ class RLEvaluator:
 if __name__ == "__main__":
     eval = RLEvaluator()
     config = {
-        'discretize_val': 51,
+        'discretize_val': 101,
         'learning_rate': 0.01,
         'discount_factor': 0.9,
         'n_episodes': 10000,
