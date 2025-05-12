@@ -12,7 +12,7 @@ Transition = namedtuple('Transition', ('state', 'action', 'reward', 'next_state'
 def run_qlearning(agent, env, num_episodes=50):
     history = []
     for episode in range(num_episodes):
-        state = env.reset() # initial state
+        state = env.reset()
         final_reward, n_moves = 0.0, 0
         done = False
 
@@ -20,11 +20,11 @@ def run_qlearning(agent, env, num_episodes=50):
             action_idx = agent.choose_action(state)
             action = agent.actions[action_idx]
             next_state, reward = env.interaction(state.copy(), action)
-            done = reward == env.goal_reward  # goal reached
+            done = reward == env.goal_reward
             agent.learn(Transition(state, action_idx, reward, next_state, done))
             state = next_state.copy()
             n_moves += 1
-            final_reward = reward  # store final reward for logging
+            final_reward = reward
 
         history.append((n_moves, final_reward))
         print(f'Episode {episode}: Reward {final_reward:.2f}, #Moves {n_moves}')
