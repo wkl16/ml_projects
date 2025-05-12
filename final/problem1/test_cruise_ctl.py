@@ -10,7 +10,7 @@ Transition = namedtuple('Transition', ('state', 'action', 'reward', 'next_state'
 
 
 # This function is modeled off of one
-#  of the examples in the textbook
+# of the examples in the textbook
 def q_learn_stuff(agent, num_episodes=50000):
     # Initialize Parameters
     history = []
