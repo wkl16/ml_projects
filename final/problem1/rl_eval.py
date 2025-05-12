@@ -36,7 +36,7 @@ class RLEvaluator:
                 state = next_state
                 steps += 1
                 visited_states.add(state)
-                done = reward <= env.neg_reward
+                done = reward == env.neg_reward
             if done:
                 success_rate += 1
                 steps_to_goal.append(steps)
@@ -68,7 +68,7 @@ class RLEvaluator:
                 action_idx = agent.choose_action(state)
                 action = agent.actions[action_idx]
                 next_state, reward = env.interact(action)
-                done = reward <= env.neg_reward
+                done = reward == env.neg_reward
                 # update q-vals
                 agent._learn((state, action_idx, reward, next_state, done))
                 state = next_state
