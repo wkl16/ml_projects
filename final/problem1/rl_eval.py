@@ -36,14 +36,14 @@ class RLEvaluator:
                 state = next_state
                 steps += 1
                 visited_states.add(state)
-                done = reward == env.pos_reward
+                done = reward == env.neg_reward
             if done:
                 success_rate += 1
                 steps_to_goal.append(steps)
             total_rewards.append(episode_reward)
         return {
             'mean_reward': np.mean(total_rewards),
-            'success_rate': success_rate / n_eval_episodes,
+            'success_rate': 1 - (success_rate / n_eval_episodes),
             'mean_steps': np.mean(steps_to_goal) if steps_to_goal else max_steps,
             'std_reward': np.std(total_rewards),
             'n_states_visited_eval': len(visited_states)
@@ -68,7 +68,7 @@ class RLEvaluator:
                 action_idx = agent.choose_action(state)
                 action = agent.actions[action_idx]
                 next_state, reward = env.interact(action)
-                done = reward == env.pos_reward
+                done = reward == env.neg_reward
                 # update q-vals
                 agent._learn((state, action_idx, reward, next_state, done))
                 state = next_state
