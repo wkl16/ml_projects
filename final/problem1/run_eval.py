@@ -10,9 +10,9 @@ def main():
     learning_rates = [0.01, 0.1]
     discount_factors = [0.9, 0.99]
     episode_configs = [
-        (5000, 100),
-        (10000, 500),
-        (20000, 1000)
+        (1000, 100),
+        (5000, 250),
+        (10000, 500)
     ]
     for disc_val, lr, gamma, (n_episodes, max_length) in itertools.product(
             discretization_values, learning_rates, discount_factors, episode_configs):
